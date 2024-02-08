@@ -12,34 +12,31 @@ def file_complaint(request):
         if form.is_valid():
             complaint = form.save(commit=False)
             complaint.user = request.user
-            complaint.status = 'Unresolved'  # Set initial status to Unresolved
+            complaint.status = 'Unresolved'
             complaint.save()
             return redirect('complaint_list')
     else:
         form = ComplaintForm()
 
-    # Retrieve distinct categories for the filter dropdown
     categories = Category.objects.all()
 
     return render(request, 'complaints/file_complaint.html', {'form': form, 'categories': categories})
 
 @login_required(login_url='login')
 def complaint_list(request):
-    # Get filter parameters from the URL
     filter_day = request.GET.get('day')
     filter_month = request.GET.get('month')
     filter_category = request.GET.get('category')
 
-    # Start with all complaints
     complaints = Complaint.objects.all()
 
-    # Apply filters if provided
     if filter_day:
         complaints = complaints.filter(created_at__day=filter_day)
     if filter_month:
         complaints = complaints.filter(created_at__month=filter_month)
     if filter_category:
-        complaints = complaints.filter(category__id=filter_category)
+        complaints = complaints.filter(category__name=filter_category)
+
 
     return render(request, 'complaints/complaint_list.html', {'complaints': complaints})
 

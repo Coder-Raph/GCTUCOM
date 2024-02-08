@@ -6,7 +6,7 @@ from .models import Complaint
 
 class ComplaintForm(forms.ModelForm):
     # Replace the 'email' field with a 'student_id' field
-    student_id = forms.CharField(label='Student ID', max_length=20)
+    student_id = forms.CharField(label='Student ID', max_length=10)
 
     class Meta:
         model = Complaint

@@ -1,4 +1,3 @@
-<!-- complaints/templates/complaints/complaint_list.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,40 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complaints</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        label {
+            margin-right: 10px;
+            color: #333;
+        }
+
+        input[type="text"], select {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"], a {
+            display: inline-block;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            margin-top: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Style buttons as secondary with different color */
+        a.action-links {
+            background-color: #007bff;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #007bff;
+            color: white;
         }
 
-        /* Add custom styles for the checkbox */
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
         .solve-checkbox {
             width: 20px;
             height: 20px;
         }
 
-        /* Add styles for date pickers */
-        .ui-datepicker {
-            font-size: 12px;
+        .reset-link, .action-links {
+            display: inline-block;
+            margin-top: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .reset-link:hover, .action-links:hover {
+            text-decoration: underline;
         }
     </style>
 
-    <!-- Include jQuery and jQuery UI for date picker -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <!-- Initialize date pickers -->
     <script>
         $(function() {
             $("#datepickerDay").datepicker({ dateFormat: "dd" });
@@ -50,7 +107,6 @@
 <body>
     <h1>Complaints</h1>
 
-    <!-- Add a form for filters above the table -->
     <form method="get">
         <label for="day">Filter by Day:</label>
         <input type="text" id="datepickerDay" name="day" value="{{ request.GET.day }}">
@@ -61,15 +117,14 @@
         <label for="category">Filter by Category:</label>
         <select name="category">
             <option value="" {% if not request.GET.category %}selected{% endif %}>All</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
-            {% endfor %}
+            <option value="CHANGE OF PROGRAMME" {% if request.GET.category == "CHANGE OF PROGRAMME" %}selected{% endif %}>CHANGE OF PROGRAMME</option>
+            <option value="CHANGE OF SECTION" {% if request.GET.category == "CHANGE OF SECTION" %}selected{% endif %}>CHANGE OF SECTION</option>
+            <option value="LOGIN ISSUES" {% if request.GET.category == "LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES</option>
         </select>
 
         <input type="submit" value="Apply Filters">
     </form>
 
-    <!-- Display complaints table as before -->
     <table>
         <thead>
             <tr>
@@ -86,8 +141,8 @@
             {% for complaint in complaints %}
                 <tr>
                     <td>{{ complaint.name }}</td>
-                    <td>{{ complaint.id }}</td>
-                    <td>{{ complaint.category }}</td>
+                    <td>{{ complaint.student_id }}</td>
+                    <td>{{ complaint.category.name }}</td>
                     <td>{{ complaint.description }}</td>
                     <td>{{ complaint.status }}</td>
                     <td>{{ complaint.created_at }}</td>
@@ -99,10 +154,8 @@
         </tbody>
     </table>
 
-    <!-- Add a reset filters link -->
-    <a href="{% url 'complaint_list' %}">Reset Filters</a>
-
-    <a href="{% url 'file_complaint' %}">File a Complaint</a>
-    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <a href="{% url 'complaint_list' %}" class="reset-link">Reset Filters</a>
+    <a href="{% url 'file_complaint' %}" class="action-links">File a Complaint</a>
+    <a href="{% url 'dashboard' %}" class="action-links">Dashboard</a>
 </body>
 </html>

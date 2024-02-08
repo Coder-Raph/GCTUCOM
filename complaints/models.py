@@ -17,7 +17,7 @@ class Complaint(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    student_id = models.CharField(max_length=20)  # Add the student_id field
+    student_id = models.CharField(max_length=10)  # Add the student_id field
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

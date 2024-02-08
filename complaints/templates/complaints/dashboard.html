@@ -1,12 +1,13 @@
-<!-- complaints/templates/complaints/dashboard.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Total Complaints: {{ total_complaints }}</p>
-    <p>Solved Complaints: {{ solved_complaints }}</p>
-    <p>Unresolved Complaints: {{ unresolved_complaints }}</p>
-    <p>Complaints Today: {{ complaints_per_day }}</p>
-    <a href="{% url 'complaint_list' %}" class="btn btn-info">View Complaints</a>
-    <a href="{% url 'file_complaint' %}" class="btn btn-primary">File a Complaint</a>
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Dashboard</h1>
+        <p class="lead">Total Complaints: {{ total_complaints }}</p>
+        <p class="lead">Solved Complaints: {{ solved_complaints }}</p>
+        <p class="lead">Unresolved Complaints: {{ unresolved_complaints }}</p>
+        <p class="lead">Complaints Today: {{ complaints_per_day }}</p>
+        <a href="{% url 'complaint_list' %}" class="btn btn-info btn-lg">View Complaints</a>
+        <a href="{% url 'file_complaint' %}" class="btn btn-primary btn-lg">File a Complaint</a>
+    </div>
 {% endblock %}
