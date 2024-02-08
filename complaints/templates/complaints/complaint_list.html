@@ -123,14 +123,10 @@
         <label for="category">Filter by Category:</label>
         <select name="category">
             <option value="" {% if not request.GET.category %}selected{% endif %}>All</option>
-            <option value="CHANGE OF PROGRAMME" {% if request.GET.category=="CHANGE OF PROGRAMME" %}selected{% endif %}>
-                CHANGE OF PROGRAMME</option>
-            <option value="CHANGE OF SECTION" {% if request.GET.category=="CHANGE OF SECTION" %}selected{% endif %}>
-                CHANGE OF SECTION</option>
-            <option value="LOGIN ISSUES" {% if request.GET.category=="LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES
-            </option>
-            <option value="GRADE ISSUES" {% if request.GET.category=="GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES
-            </option>
+            <option value="CHANGE OF PROGRAMME" {% if request.GET.category == "CHANGE OF PROGRAMME" %}selected{% endif %}>CHANGE OF PROGRAMME</option>
+            <option value="CHANGE OF SECTION" {% if request.GET.category == "CHANGE OF SECTION" %}selected{% endif %}>CHANGE OF SECTION</option>
+            <option value="LOGIN ISSUES" {% if request.GET.category == "LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES</option>
+            <option value="GRADE ISSUES" {% if request.GET.category == "GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES</option>
         </select>
 
         <input type="submit" value="Apply Filters">
@@ -158,9 +154,8 @@
                 <td>{{ complaint.status }}</td>
                 <td>{{ complaint.created_at }}</td>
                 <td>
-                    <input type="checkbox" class="solve-checkbox" data-complaint-id="{{ complaint.id }}" {% if
-                        complaint.status=='Solved' %}checked{% endif %}>
-                </td>
+                    <input type="checkbox" class="solve-checkbox" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}checked{% endif %}>
+                </td>                
             </tr>
             {% endfor %}
         </tbody>
