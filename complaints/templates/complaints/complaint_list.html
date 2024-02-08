@@ -29,7 +29,8 @@
             color: #333;
         }
 
-        input[type="text"], select {
+        input[type="text"],
+        select {
             padding: 8px;
             margin-right: 10px;
             border: 1px solid #ced4da;
@@ -37,7 +38,8 @@
             box-sizing: border-box;
         }
 
-        input[type="submit"], a {
+        input[type="submit"],
+        a {
             display: inline-block;
             padding: 10px;
             background-color: #28a745;
@@ -61,7 +63,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
@@ -81,14 +84,16 @@
             height: 20px;
         }
 
-        .reset-link, .action-links {
+        .reset-link,
+        .action-links {
             display: inline-block;
             margin-top: 10px;
             color: white;
             text-decoration: none;
         }
 
-        .reset-link:hover, .action-links:hover {
+        .reset-link:hover,
+        .action-links:hover {
             text-decoration: underline;
         }
     </style>
@@ -98,12 +103,13 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
-        $(function() {
+        $(function () {
             $("#datepickerDay").datepicker({ dateFormat: "dd" });
             $("#datepickerMonth").datepicker({ dateFormat: "mm" });
         });
     </script>
 </head>
+
 <body>
     <h1>Complaints</h1>
 
@@ -117,10 +123,14 @@
         <label for="category">Filter by Category:</label>
         <select name="category">
             <option value="" {% if not request.GET.category %}selected{% endif %}>All</option>
-            <option value="CHANGE OF PROGRAMME" {% if request.GET.category == "CHANGE OF PROGRAMME" %}selected{% endif %}>CHANGE OF PROGRAMME</option>
-            <option value="CHANGE OF SECTION" {% if request.GET.category == "CHANGE OF SECTION" %}selected{% endif %}>CHANGE OF SECTION</option>
-            <option value="LOGIN ISSUES" {% if request.GET.category == "LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES</option>
-            <option value="GRADE ISSUES" {% if request.GET.category == "GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES</option>
+            <option value="CHANGE OF PROGRAMME" {% if request.GET.category=="CHANGE OF PROGRAMME" %}selected{% endif %}>
+                CHANGE OF PROGRAMME</option>
+            <option value="CHANGE OF SECTION" {% if request.GET.category=="CHANGE OF SECTION" %}selected{% endif %}>
+                CHANGE OF SECTION</option>
+            <option value="LOGIN ISSUES" {% if request.GET.category=="LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES
+            </option>
+            <option value="GRADE ISSUES" {% if request.GET.category=="GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES
+            </option>
         </select>
 
         <input type="submit" value="Apply Filters">
@@ -140,17 +150,18 @@
         </thead>
         <tbody>
             {% for complaint in complaints %}
-                <tr>
-                    <td>{{ complaint.name }}</td>
-                    <td>{{ complaint.student_id }}</td>
-                    <td>{{ complaint.category.name }}</td>
-                    <td>{{ complaint.description }}</td>
-                    <td>{{ complaint.status }}</td>
-                    <td>{{ complaint.created_at }}</td>
-                    <td>
-                        <input type="checkbox" class="solve-checkbox" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}checked{% endif %}>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ complaint.name }}</td>
+                <td>{{ complaint.student_id }}</td>
+                <td>{{ complaint.category.name }}</td>
+                <td>{{ complaint.description }}</td>
+                <td>{{ complaint.status }}</td>
+                <td>{{ complaint.created_at }}</td>
+                <td>
+                    <input type="checkbox" class="solve-checkbox" data-complaint-id="{{ complaint.id }}" {% if
+                        complaint.status=='Solved' %}checked{% endif %}>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -159,4 +170,5 @@
     <a href="{% url 'file_complaint' %}" class="action-links">File a Complaint</a>
     <a href="{% url 'dashboard' %}" class="action-links">Dashboard</a>
 </body>
+
 </html>
