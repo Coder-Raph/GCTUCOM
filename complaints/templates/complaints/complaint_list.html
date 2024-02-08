@@ -120,6 +120,7 @@
             <option value="CHANGE OF PROGRAMME" {% if request.GET.category == "CHANGE OF PROGRAMME" %}selected{% endif %}>CHANGE OF PROGRAMME</option>
             <option value="CHANGE OF SECTION" {% if request.GET.category == "CHANGE OF SECTION" %}selected{% endif %}>CHANGE OF SECTION</option>
             <option value="LOGIN ISSUES" {% if request.GET.category == "LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES</option>
+            <option value="GRADE ISSUES" {% if request.GET.category == "GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES</option>
         </select>
 
         <input type="submit" value="Apply Filters">
@@ -129,7 +130,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Index</th>
+                <th>Student ID</th>
                 <th>Category</th>
                 <th>Description</th>
                 <th>Status</th>

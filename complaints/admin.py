@@ -7,6 +7,9 @@ from .models import Complaint, Category
 from .forms import ComplaintForm
 from django.urls import path
 
+admin.site.site_header = 'GCTU SOFTWARE COMPLAINTS'
+admin.site.index_title = 'COMPLAINTS SYSTEMS DASHBOARD'
+
 class ComplaintAdmin(admin.ModelAdmin):
     form = ComplaintForm
     list_display = ('name', 'student_id', 'category', 'description', 'status', 'created_at', 'mark_as_solved_button', 'delete_button')

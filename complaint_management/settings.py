@@ -28,8 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'complaints.apps.YourAppNameConfig',
     'crispy_forms', # For form rendering
-    'complaints',   # Our app
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # Use 'bootstrap4' for Bootstrap styling
