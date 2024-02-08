@@ -24,19 +24,6 @@ def file_complaint(request):
     return render(request, 'complaints/file_complaint.html', {'form': form, 'categories': categories})
 
 @login_required(login_url='login')
-def add_complaint(request):
-    if request.method == 'POST':
-        form = ComplaintForm(request.POST)
-        if form.is_valid():
-            complaint = form.save(commit=False)
-            complaint.user = request.user
-            complaint.save()
-            return redirect('home')  # Adjust the URL as needed
-    else:
-        form = ComplaintForm()
-    return render(request, 'complaints/add_complaint.html', {'form': form})
-
-@login_required(login_url='login')
 def complaint_list(request):
     # Get filter parameters from the URL
     filter_day = request.GET.get('day')
@@ -52,7 +39,7 @@ def complaint_list(request):
     if filter_month:
         complaints = complaints.filter(created_at__month=filter_month)
     if filter_category:
-        complaints = complaints.filter(category=filter_category)
+        complaints = complaints.filter(category__id=filter_category)
 
     return render(request, 'complaints/complaint_list.html', {'complaints': complaints})
 
@@ -75,12 +62,20 @@ def dashboard(request):
 
     return render(request, 'complaints/dashboard.html', context)
 
-def solve_complaint(request, complaint_id):
+@login_required(login_url='login')
+def mark_complaint_as_solved(request, complaint_id):
     complaint = get_object_or_404(Complaint, id=complaint_id)
     # Add logic to mark the complaint as solved
     complaint.status = 'Solved'
     complaint.save()
-    return redirect('complaint_list')  # Redirect to the complaint list after solving
+    return redirect('complaint_list')  # Redirect to the complaint list after marking as solved
+
+@login_required(login_url='login')
+def delete_complaint(request, complaint_id):
+    complaint = get_object_or_404(Complaint, id=complaint_id)
+    # Add logic to delete the complaint
+    complaint.delete()
+    return redirect('complaint_list')  # Redirect to the complaint list after deletion
 
 def logout_success(request):
     return render(request, 'complaints/logout_success.html')
