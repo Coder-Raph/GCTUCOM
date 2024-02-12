@@ -8,5 +8,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('mark_solved/<int:complaint_id>/', views.mark_complaint_as_solved, name='mark_complaint_as_solved'),
     path('delete/<int:complaint_id>/', views.delete_complaint, name='delete_complaint'),
+    path('mark_solved/<int:complaint_id>/', views.mark_complaint_as_solved, name='mark_complaint_as_solved'),
     # Add more URL patterns as needed
 ]

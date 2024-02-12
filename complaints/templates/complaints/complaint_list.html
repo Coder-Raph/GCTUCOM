@@ -103,11 +103,32 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
-        $(function () {
+        $(document).ready(function () {
             $("#datepickerDay").datepicker({ dateFormat: "dd" });
             $("#datepickerMonth").datepicker({ dateFormat: "mm" });
+    
+            // Handle "Mark as Solved" button click
+            $(".mark-solved-button").on("click", function () {
+                var complaintId = $(this).data("complaint-id");
+    
+                // Send an AJAX request to update the complaint status
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'mark_complaint_as_solved' 123 %}",  // Replace 123 with the actual complaint ID
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        is_checked: 1,
+                    },
+                    success: function () {
+                        // Optionally, you can handle the success response
+                    },
+                    error: function () {
+                        // Handle errors if any
+                    }
+                });
+            });
         });
-    </script>
+    </script>    
 </head>
 
 <body>
@@ -127,6 +148,7 @@
             <option value="CHANGE OF SECTION" {% if request.GET.category == "CHANGE OF SECTION" %}selected{% endif %}>CHANGE OF SECTION</option>
             <option value="LOGIN ISSUES" {% if request.GET.category == "LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES</option>
             <option value="GRADE ISSUES" {% if request.GET.category == "GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES</option>
+            <option value="CHANGE OF DETAILS" {% if request.GET.category == "CHANGE OF DETAILS" %}selected{% endif %}>CHANGE OF DETAILS</option>
         </select>
 
         <input type="submit" value="Apply Filters">
@@ -154,7 +176,9 @@
                 <td>{{ complaint.status }}</td>
                 <td>{{ complaint.created_at }}</td>
                 <td>
-                    <input type="checkbox" class="solve-checkbox" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}checked{% endif %}>
+                    <button class="mark-solved-button" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}disabled{% endif %}>
+                        Mark as Solved
+                    </button>
                 </td>                
             </tr>
             {% endfor %}

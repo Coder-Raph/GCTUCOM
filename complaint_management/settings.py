@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'complaints.apps.YourAppNameConfig',
     'crispy_forms', # For form rendering
+    'channels', 
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # Use 'bootstrap4' for Bootstrap styling
