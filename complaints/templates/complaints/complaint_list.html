@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,33 +107,52 @@
         $(document).ready(function () {
             $("#datepickerDay").datepicker({ dateFormat: "dd" });
             $("#datepickerMonth").datepicker({ dateFormat: "mm" });
-    
-            // Handle "Mark as Solved" button click
-            $(".mark-solved-button").on("click", function () {
+
+            // Handle checkbox state dynamically
+            $(".solve-checkbox").on("change", function () {
                 var complaintId = $(this).data("complaint-id");
-    
+                var isChecked = $(this).prop("checked");
+
+                // Store checkbox state in local storage
+                localStorage.setItem("complaint_" + complaintId, isChecked);
+
                 // Send an AJAX request to update the complaint status
                 $.ajax({
                     type: "POST",
-                    url: "{% url 'mark_complaint_as_solved' 123 %}",  // Replace 123 with the actual complaint ID
+                    url: "{% url 'mark_complaint_as_solved' complaint_id=0 %}",  // Use 0 as a placeholder
                     data: {
                         csrfmiddlewaretoken: "{{ csrf_token }}",
-                        is_checked: 1,
+                        complaint_id: complaintId,
+                        is_checked: isChecked ? 1 : 0,
                     },
-                    success: function () {
+                    success: function (data) {
                         // Optionally, you can handle the success response
+                        console.log(data);  // Log the response data to the console
                     },
-                    error: function () {
+                    error: function (error) {
                         // Handle errors if any
+                        console.error(error);  // Log the error to the console
                     }
                 });
             });
+
+            // Restore checkbox states from local storage on page load
+            $(".solve-checkbox").each(function () {
+                var complaintId = $(this).data("complaint-id");
+                var isChecked = localStorage.getItem("complaint_" + complaintId);
+
+                if (isChecked === "true") {
+                    $(this).prop("checked", true);
+                }
+            });
         });
-    </script>    
+    </script>
+
+
 </head>
 
 <body>
-    <h1>Complaints</h1>
+    <h1>COMPLAINTS</h1>
 
     <form method="get">
         <label for="day">Filter by Day:</label>
@@ -149,7 +169,7 @@
             <option value="LOGIN ISSUES" {% if request.GET.category == "LOGIN ISSUES" %}selected{% endif %}>LOGIN ISSUES</option>
             <option value="GRADE ISSUES" {% if request.GET.category == "GRADE ISSUES" %}selected{% endif %}>GRADE ISSUES</option>
             <option value="CHANGE OF DETAILS" {% if request.GET.category == "CHANGE OF DETAILS" %}selected{% endif %}>CHANGE OF DETAILS</option>
-        </select>
+        </select>        
 
         <input type="submit" value="Apply Filters">
     </form>
@@ -176,10 +196,8 @@
                 <td>{{ complaint.status }}</td>
                 <td>{{ complaint.created_at }}</td>
                 <td>
-                    <button class="mark-solved-button" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}disabled{% endif %}>
-                        Mark as Solved
-                    </button>
-                </td>                
+                    <button class="mark-solved-button" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}disabled{% endif %}>Mark as Solved</button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

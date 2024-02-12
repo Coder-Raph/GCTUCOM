@@ -33,13 +33,14 @@ def complaint_list(request):
     complaints = Complaint.objects.all()
 
     if filter_day:
-        complaints = complaints.filter(created_at__day=filter_day)
+        complaints = complaints.filter(created_at__day=int(filter_day))
     if filter_month:
-        complaints = complaints.filter(created_at__month=filter_month)
+        complaints = complaints.filter(created_at__month=int(filter_month))
     if filter_category:
         complaints = complaints.filter(category__name=filter_category)
 
     return render(request, 'complaints/complaint_list.html', {'complaints': complaints})
+
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -61,9 +62,9 @@ def dashboard(request):
     return render(request, 'complaints/dashboard.html', context)
 
 @login_required(login_url='login')
-def mark_complaint_as_solved(request):
-    if request.method == 'POST' and request.is_ajax():
-        complaint_id = request.POST.get('complaint_id')
+def mark_complaint_as_solved(request, complaint_id):
+    if request.method == 'POST' and request.headers.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        complaint_id = request.POST['complaint_id']
         is_checked = request.POST.get('is_checked')
 
         # Perform necessary actions to mark the complaint as solved based on complaint_id and is_checked
