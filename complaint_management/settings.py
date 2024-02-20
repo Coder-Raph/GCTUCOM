@@ -103,3 +103,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'complaints', 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Set session timeout to 15 minutes (15 * 60 seconds)
+SESSION_COOKIE_AGE = 15 * 60
