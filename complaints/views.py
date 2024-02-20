@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Category, Complaint
 from .forms import ComplaintForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
@@ -48,15 +48,26 @@ def dashboard(request):
     solved_complaints = Complaint.objects.filter(status='Solved').count()
     unresolved_complaints = total_complaints - solved_complaints
 
-    # Count complaints per day
     today = datetime.now().date()
     complaints_per_day = Complaint.objects.filter(created_at__date=today).count()
+    
+    # Weekly Report
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
+    complaints_this_week = Complaint.objects.filter(created_at__range=[week_start, week_end]).count()
+    
+    # Monthly Report
+    month_start = today.replace(day=1)
+    month_end = (month_start + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+    complaints_this_month = Complaint.objects.filter(created_at__range=[month_start, month_end]).count()
 
     context = {
         'total_complaints': total_complaints,
         'solved_complaints': solved_complaints,
         'unresolved_complaints': unresolved_complaints,
         'complaints_per_day': complaints_per_day,
+        'complaints_this_week': complaints_this_week,
+        'complaints_this_month': complaints_this_month,
     }
 
     return render(request, 'complaints/dashboard.html', context)

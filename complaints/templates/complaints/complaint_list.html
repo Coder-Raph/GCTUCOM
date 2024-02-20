@@ -108,13 +108,10 @@
             $("#datepickerDay").datepicker({ dateFormat: "dd" });
             $("#datepickerMonth").datepicker({ dateFormat: "mm" });
 
-            // Handle checkbox state dynamically
+            // Handle checkbox change to mark as solved
             $(".solve-checkbox").on("change", function () {
                 var complaintId = $(this).data("complaint-id");
-                var isChecked = $(this).prop("checked");
-
-                // Store checkbox state in local storage
-                localStorage.setItem("complaint_" + complaintId, isChecked);
+                var isChecked = $(this).prop("checked") ? 1 : 0; // Convert to integer
 
                 // Send an AJAX request to update the complaint status
                 $.ajax({
@@ -123,11 +120,13 @@
                     data: {
                         csrfmiddlewaretoken: "{{ csrf_token }}",
                         complaint_id: complaintId,
-                        is_checked: isChecked ? 1 : 0,
+                        is_checked: isChecked,
                     },
                     success: function (data) {
                         // Optionally, you can handle the success response
                         console.log(data);  // Log the response data to the console
+                        // Store checkbox state in local storage
+                        localStorage.setItem("complaint_" + complaintId, isChecked);
                     },
                     error: function (error) {
                         // Handle errors if any
@@ -141,12 +140,14 @@
                 var complaintId = $(this).data("complaint-id");
                 var isChecked = localStorage.getItem("complaint_" + complaintId);
 
-                if (isChecked === "true") {
+                if (isChecked === "1") {
+                    // Check the checkbox if the complaint is already marked as solved
                     $(this).prop("checked", true);
                 }
             });
         });
     </script>
+       
 
 
 </head>
@@ -196,7 +197,7 @@
                 <td>{{ complaint.status }}</td>
                 <td>{{ complaint.created_at }}</td>
                 <td>
-                    <button class="mark-solved-button" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}disabled{% endif %}>Mark as Solved</button>
+                    <input type="checkbox" class="solve-checkbox" data-complaint-id="{{ complaint.id }}" {% if complaint.status == 'Solved' %}checked{% endif %}>
                 </td>
             </tr>
             {% endfor %}
